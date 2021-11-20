@@ -1,6 +1,8 @@
 flask
 Werkzeug
-Jinja
+Jinja2
 MarkupSafe
 ItsDangerous
 Click
+pymongo
+flask_pymongo
