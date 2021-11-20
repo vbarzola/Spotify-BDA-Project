@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 from werkzeug.wrappers import response
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/Spotify-Local"
+app.config["MONGO_URI"] = "mongodb://34.70.139.149:27017/SpotifyDatabase"
 mongo = PyMongo(app)
 
 @app.route("/playlists", methods=["GET"])
