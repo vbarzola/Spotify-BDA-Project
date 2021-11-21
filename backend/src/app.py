@@ -4,11 +4,13 @@ from flask_pymongo import PyMongo
 from bson import json_util
 from bson.objectid import ObjectId
 from werkzeug.wrappers import response
+from flask_cors import CORS
 
 import subprocess
 import os
 
 app = Flask(__name__)
+CORS(app)
 host = os.environ.get('MONGO_SERVER_HOST', '127.0.0.1:27017')
 app.config["MONGO_URI"] = "mongodb://"+host+"/test"
 mongo = PyMongo(app)

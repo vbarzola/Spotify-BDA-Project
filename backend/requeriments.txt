@@ -6,3 +6,4 @@ ItsDangerous
 Click
 pymongo
 flask_pymongo
+flask_cors
