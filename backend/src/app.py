@@ -5,6 +5,8 @@ from bson import json_util
 from bson.objectid import ObjectId
 from werkzeug.wrappers import response
 
+import subprocess
+
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://34.70.139.149:27017/test"
 mongo = PyMongo(app)
@@ -14,6 +16,14 @@ def get_playlists():
     response = collection.find().limit(10)
     playlists = json_util.dumps(response)
     return Response(playlists, mimetype="application/json")
+
+@app.route("/mapReduce", methods=["GET"])
+def get_mapReduce():
+    bashCommand = "hdfs dfs -cat gs://datos-spotify/output/prueba8/part* | sort -t$'\\\t' -k 3 -n -r"
+    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    req = output.splitlines()[0]
+    return Response(req, mimetype="application/json")
 
 @app.route("/playlists/<playlist_id>", methods=["GET"])
 def get_playlist(playlist_id):
