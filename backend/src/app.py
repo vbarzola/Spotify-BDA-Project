@@ -19,7 +19,7 @@ def get_playlists():
 
 @app.route("/mapReduce", methods=["GET"])
 def get_mapReduce():
-    bashCommand = "hdfs dfs -cat gs://datos-spotify/output/prueba8/part* | sort -t$'\\\\\\\t' -k 3 -n -r"
+    bashCommand = "hdfs dfs -cat gs://datos-spotify/output/prueba8/part* | sort -t$'\t' -k 3 -n -r"
     process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     req = output.splitlines()[0]
