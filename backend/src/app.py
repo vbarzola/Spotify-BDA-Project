@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://34.70.139.149:27017/test"
 mongo = PyMongo(app)
 collection = mongo.db.SpotifyDatabase
+
 @app.route("/playlists", methods=["GET"])
 def get_playlists():
     response = collection.find().limit(10)
@@ -18,12 +19,54 @@ def get_playlists():
     return Response(playlists, mimetype="application/json")
 
 @app.route("/mapReduce", methods=["GET"])
-def get_mapReduce():
-    bashCommand = "hdfs dfs -cat gs://datos-spotify/output/prueba8/part* | sort -t$'\t' -k 3 -n -r"
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+def get_map_reduce():
+    bashCommand = "hdfs dfs -cat gs://datos-spotify/output/spotifyPlaylists/part*"
+    try:
+        process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    except:
+        return Response(json_util.dumps({"status": "error"}), mimetype="application/json")
     output, error = process.communicate()
-    req = output.splitlines()[0]
-    return Response(req, mimetype="application/json")
+    results = output.splitlines()
+    max_frecuent_song = {"artist": "", "song": "", "frecuency": 0}
+    for result in results:
+        result = result.split("\t")
+        if int(result[2]) > max_frecuent_song["frecuency"]:
+            max_frecuent_song["artist"] = result[0]
+            max_frecuent_song["song"] = result[1]
+            max_frecuent_song["frecuency"] = int(result[2])
+    return Response(json_util.dumps(max_frecuent_song), mimetype="application/json")
+
+@app.route("/doMapReduce", methods=["GET"])
+def get_do_map_reduce():
+    try:
+        remove_command = "hdfs dfs -rm -r gs://datos-spotify/output/spotifyPlaylistsTmp"
+        process = subprocess.Popen(remove_command.split(), stdout=subprocess.PIPE)
+        process.communicate()
+    except:
+        pass
+    try:
+        process = subprocess.Popen([
+            'hadoop',
+            'jar',
+            '/usr/lib/hadoop/hadoop-streaming.jar',
+            '-files',
+            'gs://datos-spotify/mapper.py,gs://datos-spotify/reducer.py',
+            '-mapper',
+            'python ./mapper.py',
+            '-reducer',
+            'python ./reducer.py',
+            '-input',
+            'gs://datos-spotify/Data/*',
+            '-output',
+            'gs://datos-spotify/output/spotifyPlaylistsTmp'
+        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process.communicate()
+        copy = "hdfs dfs -cp gs://datos-spotify/output/spotifyPlaylistsTmp gs://datos-spotify/output/spotifyPlaylists"
+        process = subprocess.Popen(copy.split(), stdout=subprocess.PIPE)
+        process.communicate()
+        return Response(json_util.dumps({"status": "ok"}), mimetype="application/json")
+    except:
+        return Response(json_util.dumps({"status": "error"}), mimetype="application/json")
 
 @app.route("/playlists/<playlist_id>", methods=["GET"])
 def get_playlist(playlist_id):
