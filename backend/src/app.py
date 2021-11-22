@@ -15,8 +15,7 @@ MONGO_USERNAME = config('MONGO_USERNAME', 'test')
 MONGO_PASSWORD = config('MONGO_PASSWORD', 'test')
 MONGO_AUTH_SOURCE = config('MONGO_AUTH_SOURCE', 'admin')
 
-app.config['MONGO_URI'] = f'mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DBNAME}?authSource={MONGO_AUTH_SOURCE}'
-
+app.config['MONGO_URI'] = 'mongodb://'+MONGO_USERNAME+':'+MONGO_PASSWORD+'@'+MONGO_HOST+':'+str(MONGO_PORT)+'/'+MONGO_DBNAME+"?authSource="+MONGO_AUTH_SOURCE
 mongo = PyMongo(app)
 
 CORS(app)
