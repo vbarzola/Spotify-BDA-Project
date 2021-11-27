@@ -23,8 +23,8 @@
             <router-link :to="{ name: 'DetallePlaylist', params: { id: playlist._id.$oid }}">
             <button href="" ><i class="far fa-play-circle"></i></button>
             </router-link>
-            <button href=""><i class="fas fa-trash"></i></button>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
+            <button @click="deletePlaylist(playlist._id.$oid)"><i class="fas fa-trash"></i></button>
+            <button @click="guardarDatoPlaylist(playlist._id.$oid, playlist.name)" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
             </th>
           </tr>
         </tbody>
@@ -75,7 +75,7 @@
         </tr>-->
       <!--</tbody>-->
     </table>
-    <button id="add-row">Add Row</button>
+  
 
    
         
@@ -88,12 +88,14 @@
         <div class="modal-content">
             <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
+            <h4 class="modal-title">{{ nombrePlaylist.name }}</h4>
             </div>
             <div class="modal-body">
-            <p>Some text in the modal.</p>
+            <p>Actualice el nombre de la Playlist {{ nombrePlaylist.name }}.</p>
+            <input v-model="nuevo" />
             </div>
             <div class="modal-footer">
+            <button @click="save()" type="button" class="btn btn-default" data-dismiss="modal">Actualizar</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -119,9 +121,46 @@ export default {
   },
   data (){
     return{
-      playlists: []
+      playlists: [],
+      idplaylist: "",
+      nombrePlaylist: {
+        name: ""
+      },
+      nuevo: "",
+      blog: []
     }
+
   },
+   methods: {
+    async deletePlaylist(idplaylist) {
+      const r = await fetch("http://35.208.193.188/playlists/" + idplaylist, {
+        method: "DELETE",
+      });
+      location. reload();
+    
+    },
+     guardarDatoPlaylist(id, nombre) {
+      this.nombrePlaylist.name = nombre;
+      this.idplaylist = id;
+    },
+    async save() {
+      if(!this.nuevo=="" || !this.nuevo==null){
+        this.nombrePlaylist.name = this.nuevo;
+      }
+    const payload = JSON.stringify(this.nombrePlaylist);
+    const url = "http://35.208.193.188/playlists/" + this.idplaylist;
+    const r = await fetch(url, {
+        method: "PUT",
+        body: payload,
+        headers: {
+            "Content-type": "application/json",
+        }
+    });
+    //const response = await r.json();
+    location. reload();
+
+    }
+  }, 
   mounted(){
     fetch("http://35.208.193.188/playlists")
     .then(response => response.json())

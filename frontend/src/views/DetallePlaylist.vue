@@ -5,7 +5,7 @@
     <table id="main-table" cellspacing="0">
       <thead>
         <th colspan="4">Playlist
-            <button href=""><i class="fas fa-plus-circle"></i></button>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i></button>
         </th>
         <tr>
             <th>Canción</th>
@@ -23,7 +23,7 @@
             <th>{{ d.album_name }}</th>
             <th>
             <button href=""><i class="far fa-play-circle"></i></button>
-            <button href=""><i class="fas fa-trash"></i></button>
+            <button @click="deleteTrack(d.track_name)"><i class="fas fa-trash"></i></button>
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
             </th>
           </tr>
@@ -75,7 +75,6 @@
         </tr>-->
       <!--</tbody>-->
     </table>
-    <button id="add-row">Add Row</button>
 
    
         
@@ -88,12 +87,19 @@
         <div class="modal-content">
             <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
+            <h4 class="modal-title">Añada un nuevo track</h4>
             </div>
             <div class="modal-body">
-            <p>Some text in the modal.</p>
+            <p>Ingrese los siguiente datos</p>
+            <div>
+              <p>Nombre del artista:</p><input v-model="artista" />
+              <p>Nombre de la canción:</p><input v-model="cancion" />
+              <p>Nombre del album:</p><input v-model="album" />
+              <p>Duración (milisegundos):</p><input v-model="duracion" />
+            </div>
             </div>
             <div class="modal-footer">
+            <button @click="añadirTrack()" type="button" class="btn btn-default" data-dismiss="modal">Añadir</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -120,9 +126,47 @@ export default {
   props: ['id'],
   data (){
     return{
-      detalle: []
+      detalle: [],
+      trackname: "",
+      nuevoTrack: {
+        artist_name: "",
+        track_name: "",
+        album_name: "",
+        duration_ms: 0,
+      },
+      cancion:"",
+      album:"",
+      duracion:"",
+      artista:""
     }
   },
+  methods: {
+     async deleteTrack(trackname) {
+    const r = await fetch("http://35.208.193.188/playlists/" + this.$route.params.id + "/tracks/" + trackname, {
+        method: "DELETE",
+    });
+    location. reload();
+
+},
+async añadirTrack() {
+    this.nuevoTrack.artist_name = this.artista; 
+    this.nuevoTrack.track_name = this.cancion; 
+    this.nuevoTrack.album_name = this.album; 
+    this.nuevoTrack.duration_ms = this.duracion;  
+    const payload = JSON.stringify(this.nuevoTrack);
+    const url = "http://35.208.193.188/playlists/" + this.$route.params.id + "/tracks";
+    const r = await fetch(url, {
+        method: "POST",
+        body: payload,
+        headers: {
+            "Content-type": "application/json",
+        }
+    });
+    //const response = await r.json();
+    //location. reload();
+
+    }
+},
   mounted(){
       console.log(this.$route.params.id);
 
