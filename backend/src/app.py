@@ -54,7 +54,10 @@ def delete_playlist(playlist_id):
 @app.route("/playlists/<playlist_id>/tracks", methods=["POST"])
 def add_track_to_playlist(playlist_id):
     try:
-      track = {"artist_name": request.json["artist_name"], "track_name": request.json["track_name"], "album_name": request.json["album_name"]}
+      track = {"artist_name": request.json["artist_name"], 
+      "track_name": request.json["track_name"], 
+      "album_name": request.json["album_name"],
+      "duration_ms": request.json["duration_ms"]} 
       response = Playlists.update_one({"_id": ObjectId(playlist_id)}, {"$push": {"tracks": track}, "$inc": { "num_tracks": 1 } })
       return Response(response, mimetype="application/json")
     except:
@@ -64,7 +67,9 @@ def add_track_to_playlist(playlist_id):
 @app.route("/playlists/<playlist_id>/tracks/<track_name>", methods=["DELETE"])
 def delete_track_from_playlist(playlist_id, track_name):
     try:
-      Playlists.update_one({"_id": ObjectId(playlist_id)}, {"$pull": {"tracks": {"track_name" : track_name} }, "$inc": { "num_tracks": -1 }})
+      Playlists.update_one({"_id": ObjectId(playlist_id)}, 
+      {"$pull": {"tracks": {"track_name" : track_name} }, 
+      "$inc": { "num_tracks": -1 }})
       return Response("", status=204)
     except:
       return Response(status=404)
