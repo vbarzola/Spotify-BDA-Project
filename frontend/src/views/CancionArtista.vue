@@ -2,10 +2,10 @@
 <template>
 
 <div id="table-container">
-    <h1>Lista de {{ this.$route.params.id }}</h1>
+    <h1>{{ this.$route.params.id }}</h1>
     <table id="main-table" cellspacing="0">
       <thead>
-        <th colspan="3">Artistas
+        <th colspan="3">Canciones
         </th>
         <tr>
             <th>Numero</th>
@@ -28,52 +28,7 @@
             </th>-->
           </tr>
         </tbody>
-        <!--<tr>
-            <th>1</th>
-            <th>Playlist1</th>
-            <th>
-            <button href=""><i class="far fa-play-circle"></i></button>
-            <button href=""><i class="fas fa-trash"></i></button>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
-            </th>
-        </tr>
-        <tr>
-            <th>1</th>
-            <th>Playlist1</th>
-            <th>
-            <button href=""><i class="far fa-play-circle"></i></button>
-            <button href=""><i class="fas fa-trash"></i></button>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
-            </th>
-        </tr>
-        <tr>
-            <th>1</th>
-            <th>Playlist1</th>
-            <th>
-            <button href=""><i class="far fa-play-circle"></i></button>
-            <button href=""><i class="fas fa-trash"></i></button>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
-            </th>
-        </tr>
-        <tr>
-            <th>1</th>
-            <th>Playlist1</th>
-            <th>
-            <button href=""><i class="far fa-play-circle"></i></button>
-            <button href=""><i class="fas fa-trash"></i></button>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
-            </th>
-        </tr>
-        <tr>
-            <th>1</th>
-            <th>Playlist1</th>
-            <th>
-            <button href=""><i class="far fa-play-circle"></i></button>
-            <button href=""><i class="fas fa-trash"></i></button>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>
-            </th>
-        </tr>-->
-      <!--</tbody>-->
+        
     </table>
     
    
