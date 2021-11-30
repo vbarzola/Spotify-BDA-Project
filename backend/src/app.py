@@ -8,6 +8,8 @@ from decouple import config
 import subprocess
 
 app = Flask(__name__)
+
+"""Getting the mongoDB credentials from environment variables"""
 MONGO_HOST = config('MONGO_HOST', 'localhost')
 MONGO_PORT = config('MONGO_PORT', 27017)
 MONGO_DBNAME = config('MONGO_DBNAME', 'test')
@@ -24,12 +26,16 @@ Playlists = mongo.db.Playlists
 
 @app.route("/playlists", methods=["GET"])
 def get_playlists():
+    """ Method to get the first 10 playlists from the database """
+    
     response = Playlists.find().limit(10)
     playlists = json_util.dumps(response)
     return Response(playlists, mimetype="application/json")
 
 @app.route("/playlists/<playlist_id>", methods=["GET"])
 def get_playlist(playlist_id):
+    """ Method to get a specific playlist from the database by its id """
+    
     try:
       response = Playlists.find_one({"_id": ObjectId(playlist_id)})
       playlist = json_util.dumps(response)
@@ -39,6 +45,8 @@ def get_playlist(playlist_id):
 
 @app.route("/playlists/<playlist_id>", methods=["PUT"])
 def update_playlist(playlist_id):
+    """ Method to update a specific playlist from the database by its id """
+    
     try:
       name = request.json["name"]
       Playlists.update_one({"_id": ObjectId(playlist_id)}, {"$set": {"name": name}})
@@ -48,11 +56,15 @@ def update_playlist(playlist_id):
 
 @app.route("/playlists/<playlist_id>", methods=["DELETE"])
 def delete_playlist(playlist_id):
+    """ Method to delete a specific playlist from the database by its id """
+    
     Playlists.delete_one({"_id": ObjectId(playlist_id)})
     return Response("", status=204)
 
 @app.route("/playlists/<playlist_id>/tracks", methods=["POST"])
 def add_track_to_playlist(playlist_id):
+    """ Method to add a track to a specific playlist from the database by its id """
+    
     try:
       track = {"artist_name": request.json["artist_name"], 
       "track_name": request.json["track_name"], 
@@ -66,6 +78,9 @@ def add_track_to_playlist(playlist_id):
 
 @app.route("/playlists/<playlist_id>/tracks/<track_name>", methods=["DELETE"])
 def delete_track_from_playlist(playlist_id, track_name):
+    """ Method to delete a specific track from a specific playlist from the database by 
+    the playlist id and the track name """
+    
     try:
       Playlists.update_one({"_id": ObjectId(playlist_id)}, 
       {"$pull": {"tracks": {"track_name" : track_name} }, 
@@ -76,6 +91,9 @@ def delete_track_from_playlist(playlist_id, track_name):
 
 @app.route("/mapReduce", methods=["GET"])
 def get_map_reduce():
+    """ Method to get the map reduce function from the google cloud storage.
+    This method returns the most frecuent song among the playlists """
+    
     bashCommand = "hdfs dfs -cat gs://datos-spotify/output/spotifyPlaylists/part*"
     try:
         process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
@@ -94,6 +112,12 @@ def get_map_reduce():
 
 @app.route("/doMapReduce", methods=["GET"])
 def get_do_map_reduce():
+    """ Method to run the map reduce job in the cluster of Google cloud dataproc.
+    this method will take time to give an answer depending on the number of workers of the cluster.
+    
+    After the excecution of this method, the map reduce job will be stored in the bucket, and must use
+    the get_map_reduce method to get the result of the job. """
+
     try:
         remove_command = "hdfs dfs -rm -r gs://datos-spotify/output/spotifyPlaylistsTmp"
         process = subprocess.Popen(remove_command.split(), stdout=subprocess.PIPE)

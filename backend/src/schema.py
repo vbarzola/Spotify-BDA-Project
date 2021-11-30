@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 from decouple import config
+
+"""Getting the mongoDB credentials from environment variables"""
 MONGO_HOST = config('MONGO_HOST', 'localhost')
 MONGO_PORT = config('MONGO_PORT', 27017)
 MONGO_DBNAME = config('MONGO_DBNAME', 'test')
@@ -8,9 +10,12 @@ MONGO_PASSWORD = config('MONGO_PASSWORD', 'test')
 MONGO_AUTH_SOURCE = config('MONGO_AUTH_SOURCE', 'admin')
 
 MONGO_URI= 'mongodb://'+MONGO_USERNAME+':'+MONGO_PASSWORD+'@'+MONGO_HOST+':'+str(MONGO_PORT)+'/'+MONGO_DBNAME+"?authSource="+MONGO_AUTH_SOURCE
+
 def create_playlist_collection():
+    """ Method that creates the playlist collection in the mongoDB database"""
+
     db = MongoClient(MONGO_URI).get_database()
-    db.create_collection('Playlists2.0', validator={
+    db.create_collection('Playlists', validator={
         '$jsonSchema': {
             'bsonType': 'object',
             'additionalProperties': True,
