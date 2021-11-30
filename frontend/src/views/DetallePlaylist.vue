@@ -25,7 +25,7 @@
             <th>{{ d.album_name }}</th>
             <th>
              <!--<button href=""><i class="far fa-play-circle"></i></button>-->
-            <button @click="deleteTrack(d.track_name)"><i class="fas fa-trash"></i></button>
+            <button @click="deleteTrack(d.track_name)" ><i class="fas fa-trash"></i></button>
              <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>-->
             </th>
           </tr>
@@ -104,8 +104,7 @@ export default {
     const r = await fetch("http://35.208.193.188/playlists/" + this.$route.params.id + "/tracks/" + trackname, {
         method: "DELETE",
     });
-    location. reload();
-
+    this.detalle.tracks=this.detalle.tracks.filter((t)=>t.track_name!=trackname)
 },
 async añadirTrack() {
     this.nuevoTrack.artist_name = this.artista; 
@@ -123,7 +122,9 @@ async añadirTrack() {
     });
     //const response = await r.json();
     //location. reload();
-
+    //this.router.go("http://35.208.193.188/playlists/" + this.$route.params.id);
+    this.detalle.tracks.push({...this.nuevoTrack});
+    //console.log(this.detalle);
     }
 },
   mounted(){

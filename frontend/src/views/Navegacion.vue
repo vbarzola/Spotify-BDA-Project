@@ -190,6 +190,9 @@ i {
 		left: -25px;
 	}
 }
+a{
+	color: white;
+}
 </style>
 <script>
 
