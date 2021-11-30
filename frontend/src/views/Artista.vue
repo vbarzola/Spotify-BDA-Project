@@ -5,8 +5,7 @@
     <h1>Lista de artistas</h1>
     <table id="main-table" cellspacing="0">
       <thead>
-        <th colspan="3">Artistas
-        </th>
+        
         <tr>
             <th>Numero</th>
             <th>Nombre</th>
@@ -16,14 +15,14 @@
       <tbody class="tableplaylist">
         <tr v-for="(ar, index)  in artist" :key="ar" class="playlist">
           
-            <th>{{ index }}</th>
-            <th>{{ ar }}</th>
-            <th>
-            <router-link tag="th" :to="{ name: 'CancionArtista', params: { id: ar }}">
+            <td>{{ index+1 }}</td>
+            <td>{{ ar }}</td>
+            <td>
+            <router-link tag="td" :to="{ name: 'CancionArtista', params: { id: ar }}">
             <button href="" ><i class="far fa-play-circle"></i></button>
             </router-link>
             <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>-->
-            </th>
+            </td>
           </tr>
         </tbody>
     </table>

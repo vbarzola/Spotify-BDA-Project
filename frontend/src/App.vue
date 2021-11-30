@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-  <div id="nav">
-<router-link to="/"> Home </router-link>
-                <router-link to="/playlist"> Playlist 
-                </router-link>
-                <router-link to="/artista"> Artista </router-link>
-            
+    <div id="nav" >
+      <router-link to="/"> Home  </router-link> /
+      <router-link to="/playlist"> Playlist</router-link> /
+      <router-link to="/artista"> Artista </router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -23,6 +21,7 @@
 
 #nav {
   padding: 30px;
+  color: white;
 }
 
 #nav a {
@@ -33,11 +32,9 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
-body{
+body {
   background-image: url("./assets/imagen1.jpg");
   background-size: 100% 125%;
   background-attachment: fixed;
 }
 </style>
-
-

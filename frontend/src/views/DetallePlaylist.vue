@@ -5,7 +5,7 @@
     <table id="main-table" cellspacing="0">
       <thead>
         <th colspan="4">Lista de canciones
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i></button>
+            <button type="button" id="add-button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i></button>
         </th>
         <tr>
             <th>Canción</th>
@@ -18,16 +18,16 @@
           <tbody>
         <tr v-for="d in detalle.tracks" :key="d._id" class="detalle">
  
-            <th>{{ d.track_name }}</th>
-            <router-link tag="th" :to="{ name: 'CancionArtista', params: { id: d.artist_name }}">
-            <th>{{ d.artist_name }}</th>
+            <td>{{ d.track_name }}</td>
+            <router-link tag="td" :to="{ name: 'CancionArtista', params: { id: d.artist_name }}">
+            <td>{{ d.artist_name }}</td>
             </router-link>
-            <th>{{ d.album_name }}</th>
-            <th>
+            <td>{{ d.album_name }}</td>
+            <td>
              <!--<button href=""><i class="far fa-play-circle"></i></button>-->
             <button @click="deleteTrack(d.track_name)" ><i class="fas fa-trash"></i></button>
              <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="fas fa-edit"></i></button>-->
-            </th>
+            </td>
           </tr>
         </tbody>
         
@@ -58,8 +58,8 @@
             </div>
             </div>
             <div class="modal-footer">
-            <button @click="añadirTrack()" type="button" class="btn btn-default" data-dismiss="modal">Añadir</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button @click="añadirTrack()" type="button" class="btn btn-default" data-dismiss="modal" style="margin-right:5px">Añadir</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
         
@@ -70,7 +70,11 @@
 </div>
 </template>
 
-
+<style scoped>
+#add-button {
+  background-color: #27afd8;
+}
+</style>
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
