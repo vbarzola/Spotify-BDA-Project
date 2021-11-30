@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img alt="Vue logo" width="300px" height="300px" src="../assets/logo3.png">
     <!--<HelloWorld msg="Welcome to Your Vue.js App"/>-->
     <div id="table-container">
     <h1>Canción más escuchada</h1>
