@@ -35,6 +35,7 @@
 body{
   background-image: url("./assets/imagen1.jpg");
   background-size: 100% 125%;
+  background-attachment: fixed;
 }
 </style>
 
